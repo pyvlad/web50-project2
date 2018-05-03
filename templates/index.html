@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Web50 - Project2</title>
+  </head>
+  <body>
+    {% if username %}
+    <h1>Hello, {{ username }}!</h1>
+    {% else %}
+    <h1>Welcome!</h1>
+    <form>
+       Please submit your username:<br>
+       <input type="text" name="username"><br>
+       <button type="submit">Send</button>
+    </form>
+    {% endif %}
+  </body>
+</html>
