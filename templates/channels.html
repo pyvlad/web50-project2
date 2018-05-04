@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Web50 - Project2</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script>
+
+      var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+      socket.on('connect', function(){
+
+        // make it possible to create a new channel
+        document.querySelector("form").onsubmit = () => {
+            let newchannel = document.querySelector("#newchannel");
+            socket.emit("create channel", {"channel": newchannel.value});
+            newchannel.value = '';
+            return false;
+        }
+
+      });
+
+      socket.on('new channel', function(channel){
+        const li = document.createElement("li");
+        li.innerHTML = channel;
+        document.querySelector('#channels').append(li);
+      });
+
+      socket.on('all channels', function(channels){
+        channels.forEach(channel => {
+          const li = document.createElement("li");
+          li.innerHTML = channel;
+          document.querySelector('#channels').append(li);
+        });
+      });
+
+    </script>
+  </head>
+
+  <body>
+    <h2>List of current channels</h2>
+    <ul id="channels"></ul>
+    <h2>Create new channel</h2>
+    <form id="form" action="">
+      <input id="newchannel" autocomplete="off" />
+      <button>Create channel</button>
+    </form>
+  </body>
+</html>
