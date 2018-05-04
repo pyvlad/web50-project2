@@ -15,4 +15,4 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app)   # socketio.run() function encapsulates the start up of the web server
