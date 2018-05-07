@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Index{% endblock %}
+{% block title %}Channels{% endblock %}
 
 {% block head %}
   {{ super() }}
@@ -23,6 +23,7 @@
     // event callbacks
     function show_new_channel(channelname){
       const li = document.createElement("li");
+      li.className = 'channel-single';
       li.innerHTML = channelname;
       document.querySelector('#channels').append(li);
     };
@@ -33,11 +34,19 @@
 {% endblock %}
 
 {% block content %}
-  <h2>Channels List</h2>
-  <ul id="channels"></ul>
-  <h2>New Channel</h2>
-  <form id="form" action="">
-    <input id="channel-new" autocomplete="off" />
-    <button>add channel</button>
-  </form>
+  <div id="channels-container">
+    <h2>All Channels</h2>
+    <div id="form-container">
+      <form id="form" action="">
+        <input id="channel-new" autocomplete="off" />
+        <button>add new</button>
+      </form>
+    </div>
+    <ul id="channels"></ul>
+  </div>
+  <div id="messageboard">
+    <h2>Messages</h2>
+    <h3 id="channel-selected"></h3>
+    <ul id="messages"></ul>
+  </div>
 {% endblock %}
