@@ -1,6 +1,9 @@
 var socket = io.connect('http://' + document.domain + ':' + location.port);
 var username = localStorage.getItem('username');
-var current_channel = "";
+var current_channel = localStorage.getItem('latest_channel');
+if (!current_channel){
+  current_channel = "";
+}
 
 
 // on connect, add event handler to form submit button
@@ -10,31 +13,50 @@ socket.on('connect', function(){
         document.querySelector("#channels-new-input").value = '';
         return false;
     };
+
+    if (current_channel) {
+      socket.emit('channels-join', {
+        'username': username,
+        'channel': current_channel
+      });
+  }
 });
 
 
 
 // CHANNEL LIST
+function leave_current_channel() {
+  if (current_channel !== "") {
+    document.querySelectorAll('#channels li').forEach( (li) => {li.className = "channel"} );
+    document.querySelector('#messages-channel-name').innerHTML = "";
+    document.querySelector('#messages').innerHTML = "";
+    socket.emit('channels-leave', {
+      'username': username,
+      'channel': current_channel
+    });
+    current_channel = "";
+  }
+}
+
+
 function add_channel_to_list(name){
     const li = document.createElement("li");
-    li.className = 'channel';
+    li.className = (current_channel === name) ? 'channel-selected' : 'channel';
     li.innerHTML = name;
     li.onclick = function() {
-        if (current_channel !== "") {
-            document.querySelectorAll('#channels li').forEach( (li) => {li.className = "channel"} );
-            document.querySelector('#messages-channel-name').innerHTML = "";
-            document.querySelector('#messages').innerHTML = "";
-            socket.emit('channels-leave', {
+        if (current_channel === name) {
+            leave_current_channel();
+            this.className = "channel";
+        } else {
+            leave_current_channel();
+            current_channel = name;
+            this.className = "channel-selected";
+            socket.emit('channels-join', {
               'username': username,
-              'channel': current_channel
+              'channel': name
             });
-        }
-        current_channel = name;
-        this.className = "channel-selected";
-        socket.emit('channels-join', {
-          'username': username,
-          'channel': name
-        });
+        };
+        localStorage.setItem('latest_channel', current_channel);
     };
     document.querySelector('#channels').prepend(li);
 };
