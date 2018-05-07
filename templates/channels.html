@@ -10,25 +10,63 @@
   <script>
 
     var socket = io.connect('http://' + document.domain + ':' + location.port);
+    var username = localStorage.getItem('username');
 
     // on connect, add event handler to form submit button
     socket.on('connect', function(){
-      document.querySelector("form").onsubmit = () => {
+      document.querySelector("#form").onsubmit = () => {
           socket.emit("add new", {"channel": document.querySelector("#channel-new").value});
           document.querySelector("#channel-new").value = '';
           return false;
       }
     });
 
-    // event callbacks
+    // CHANNEL LIST
     function show_new_channel(channelname){
       const li = document.createElement("li");
-      li.className = 'channel-single';
+      li.className = 'channel-option';
       li.innerHTML = channelname;
-      document.querySelector('#channels').append(li);
+      li.onclick = function() {
+        let data = {
+          'username': username,
+          'channel': this.innerHTML
+        };
+        document.querySelectorAll('#channels li').forEach((li) => {li.className="channel-option";});
+        this.className = "channel-selected";
+        socket.emit('join', data);
+      };
+      document.querySelector('#channels').prepend(li);
     };
+
     socket.on('show all', (channels) => { channels.forEach(show_new_channel) } );
     socket.on('show new', show_new_channel);
+
+    // MESSAGE BOARD
+    function show_one_message(data){
+      const li = document.createElement("li");
+      li.innerHTML = `<span class='msg-timestamp'>${data.timestamp}</span>
+                      <span class='msg-author'>${data.author}</span>
+                      </br>
+                      <span class="msg-body">${data.message}</span>`;
+      document.querySelector('#messages').prepend(li);
+    };
+
+    socket.on('enter channel', (data) => {
+      document.querySelector('#msg-channel').innerHTML = "Channel: " + data.channel;
+      document.querySelector("#msg-form").onsubmit = () => {
+          socket.emit("new message", {
+            "channel": data.channel,
+            "username": username,
+            "message": document.querySelector("#msg-new").value
+          });
+          document.querySelector("#msg-new").value = '';
+          return false;
+      };
+      document.querySelector('#messages').innerHTML = "";
+      data.messages.forEach(show_one_message);
+    });
+    socket.on('show new message', show_one_message);
+
 
   </script>
 {% endblock %}
@@ -46,7 +84,13 @@
   </div>
   <div id="messageboard">
     <h2>Messages</h2>
-    <h3 id="channel-selected"></h3>
+    <div id="msg-form-container">
+      <form id="msg-form" action="">
+        <input id="msg-new" autocomplete="off" />
+        <button>send</button>
+      </form>
+    </div>
+    <h3 id="msg-channel"></h3>
     <ul id="messages"></ul>
   </div>
 {% endblock %}

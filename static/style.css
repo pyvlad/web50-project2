@@ -12,6 +12,11 @@
 #content {
   padding-bottom: 50px;   /* Plus Height of the footer */
 }
+#content::after {
+  content: "";
+  clear: both;
+  display: table;
+}
 
 #footer {
     position: fixed;
@@ -64,9 +69,9 @@ h2 {
   text-align: center;
 }
 
-#form-container {
+#form-container, #msg-form-container {
   text-align: center;
-  padding: 20px;
+  padding: 20px 0px;
   background: whitesmoke;
 }
 
@@ -75,21 +80,28 @@ h2 {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: lightgreen;
 }
 
- #channels li {
-   display: block;
-   margin: 10px;
-   padding: 10px;
+#channels li {
+  display: block;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid grey;
+}
+
+ #channels li.channel-option {
    background-color: whitesmoke;
-   color: darkgreen;
+   color: black;
  }
 
- #channels li:hover {
-   background-color: darkgreen;
-   color: whitesmoke;
+ #channels li.channel-selected {
+   background-color: darkgrey;
+   color: white;
    font-weight: bold;
+ }
+
+ #channels li.channel-option:hover {
+   background-color: lightgrey;
  }
 
 
@@ -99,4 +111,35 @@ h2 {
      padding: 10px;
      width: 45%;
      float: right;
+ }
+
+
+ #messages {
+     list-style-type: none;
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+ }
+
+ #messages li {
+   display: block;
+   margin: 5px;
+   padding: 5px;
+   border-bottom: 1px solid grey;
+   color: black;
+ }
+
+ .msg-author {
+   font-size: 10px;
+   font-style: italic;
+   color: blue;
+ }
+
+ .msg-timestamp {
+   color: darkgrey;
+   font-size: 10px;
+ }
+
+ .msg-body {
+   font-family: arial;
  }
