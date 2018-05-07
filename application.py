@@ -23,17 +23,17 @@ def channels():
 
 
 @socketio.on('connect')
-def send_current_channels():
-    emit('all channels', CHANNELS)
+def send_channel_list():
+    emit('show all', CHANNELS)
 
 
-@socketio.on('create channel')
+@socketio.on('add new')
 def create_channel(data):
     global CHANNELS
     channel = data["channel"]
     if channel not in CHANNELS:
         CHANNELS += [channel]
-        emit('new channel', channel, broadcast=True)
+        emit('show new', channel, broadcast=True)
         print("new channel {channel} created")
     else:
         print(f"channel {channel} already exists")
