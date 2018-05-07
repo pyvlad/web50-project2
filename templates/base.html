@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{% block title %}{% endblock %} [project2]</title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="header">
+      {% block header %}
+      <h1>Web 50: Project 2</h1>
+      {% endblock %}
+    </div>
+    <div id="navigation">
+      {% block navigation %}
+      <ul>
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('channels') }}">Channels</a></li>
+      </ul>
+      {% endblock %}
+    </div>
+    <div id="content">
+      {% block content %}
+      {% endblock %}
+    </div>
+    <div id="footer">
+      {% block footer %}
+      <p>&copy; Copyright 2018.
+        Source code on <a href="https://github.com/pyvlad/web50-project2">github</a>.
+      </p>
+      {% endblock %}
+    </div>
+  </body>
+</html>

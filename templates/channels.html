@@ -1,42 +1,43 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Web50 - Project2</title>
-    <script type="text/javascript" src="{{ url_for('static', filename='socket.io-1.3.6.min.js') }}"></script>
-    <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script> -->
-    <script>
+{% extends "base.html" %}
 
-      function show_new_channel(channelname){
-        const li = document.createElement("li");
-        li.innerHTML = channelname;
-        document.querySelector('#channels').append(li);
-      };
+{% block title %}Index{% endblock %}
 
-      var socket = io.connect('http://' + document.domain + ':' + location.port);
+{% block head %}
+  {{ super() }}
+  <script type="text/javascript" src="{{ url_for('static', filename='socket.io-1.3.6.min.js') }}"></script>
+  <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script> -->
 
-      // on connect, add event handler to form submit button
-      socket.on('connect', function(){
-        document.querySelector("form").onsubmit = () => {
-            socket.emit("add new", {"channel": document.querySelector("#channel-new").value});
-            document.querySelector("#channel-new").value = '';
-            return false;
-        }
-      });
+  <script>
 
-      // event callbacks
-      socket.on('show all', (channels) => { channels.forEach(show_new_channel) } );
-      socket.on('show new', show_new_channel);
+    var socket = io.connect('http://' + document.domain + ':' + location.port);
 
-    </script>
-  </head>
+    // on connect, add event handler to form submit button
+    socket.on('connect', function(){
+      document.querySelector("form").onsubmit = () => {
+          socket.emit("add new", {"channel": document.querySelector("#channel-new").value});
+          document.querySelector("#channel-new").value = '';
+          return false;
+      }
+    });
 
-  <body>
-    <h2>Channels List</h2>
-    <ul id="channels"></ul>
-    <h2>New Channel</h2>
-    <form id="form" action="">
-      <input id="channel-new" autocomplete="off" />
-      <button>add channel</button>
-    </form>
-  </body>
-</html>
+    // event callbacks
+    function show_new_channel(channelname){
+      const li = document.createElement("li");
+      li.innerHTML = channelname;
+      document.querySelector('#channels').append(li);
+    };
+    socket.on('show all', (channels) => { channels.forEach(show_new_channel) } );
+    socket.on('show new', show_new_channel);
+
+  </script>
+{% endblock %}
+
+{% block content %}
+  <h2>Channels List</h2>
+  <ul id="channels"></ul>
+  <h2>New Channel</h2>
+  <form id="form" action="">
+    <input id="channel-new" autocomplete="off" />
+    <button>add channel</button>
+  </form>
+{% endblock %}

@@ -1,16 +1,17 @@
-<!doctype html>
-<html>
-  <head>
-    <title>Web50 - Project2</title>
-    <script src="{{url_for('static', filename='index.js')}}"></script>
-  </head>
+{% extends "base.html" %}
 
-  <body>
-    <h2 id="greeting" style="display:none"></h2>
-    <form id="form" action="" style="display:none">
-       Please submit your username:<br>
-       <input type="text" id="username" name="username"><br>
-       <button type="submit" id="submit">Send</button>
-    </form>
-  </body>
-</html>
+{% block title %}Index{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <script src="{{url_for('static', filename='index.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+  <h2 id="greeting" style="display:none"></h2>
+  <form id="form" action="" style="display:none">
+     Please submit your username:<br>
+     <input type="text" id="username" name="username"><br>
+     <button type="submit" id="submit">Send</button>
+  </form>
+{% endblock %}
