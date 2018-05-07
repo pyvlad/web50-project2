@@ -13,7 +13,7 @@ socketio = SocketIO(app)
 MAX_MESSAGES = 5
 CHANNELS = {}
 
-
+# ROUTES
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -23,43 +23,33 @@ def channels():
     return render_template("channels.html")
 
 
+# SOCKETS
 @socketio.on('connect')
 def send_channel_list():
-    emit('show all', list(CHANNELS.keys()) )
+    emit('channels-display-all', list(CHANNELS.keys()) )
 
-
-@socketio.on('add new')
+@socketio.on('channels-new')
 def create_channel(data):
     global CHANNELS
     channel = data["channel"]
-    if channel not in CHANNELS:
+    if channel and channel not in CHANNELS:
         CHANNELS[channel] = []
-        emit('show new', channel, broadcast=True)
+        emit('channels-display-new', channel, broadcast=True)
         print(f"new channel {channel} created")
     else:
-        print(f"channel {channel} already exists")
+        print(f"{channel}: bad or existing channel name")
 
 
-@socketio.on('join')
+@socketio.on('channels-join')
 def on_join(data):
     username = data['username']
     channel = data['channel']
     join_room(channel)
-    emit('enter channel', {"channel": channel, 'messages': CHANNELS.get(channel, [])})
+    emit('channels-on-join', {"channel": channel, 'messages': CHANNELS.get(channel, [])})
     print(f'{username} has entered the room {channel}.')
     # send(username + ' has entered the room.', room=channel)
 
-
-@socketio.on('leave')
-def on_leave(data):
-    username = data['username']
-    channel = data['channel']
-    leave_room(channel)
-    print(f'{username} has left the room {channel}.')
-    # send(username + ' has left the room.', room=channel)
-
-
-@socketio.on('new message')
+@socketio.on('messages-new')
 def new_message(data):
     global CHANNELS
     channel = data["channel"]
@@ -70,7 +60,16 @@ def new_message(data):
     while len(CHANNELS[channel]) >= MAX_MESSAGES:
         (CHANNELS[channel]).pop(0)
     CHANNELS[channel] += [message]
-    emit('show new message', message, room=channel)
+    emit('messages-display-new', message, room=channel)
+
+@socketio.on('channels-leave')
+def on_leave(data):
+    username = data['username']
+    channel = data['channel']
+    leave_room(channel)
+    print(f'{username} has left the room {channel}.')
+    # send(username + ' has left the room.', room=channel)
+
 
 
 if __name__ == "__main__":
