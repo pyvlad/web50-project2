@@ -1,6 +1,6 @@
 var username = localStorage.getItem('username');
 
-var last_channel = localStorage.getItem('latest_channel')
+var last_channel = localStorage.getItem('latest_channel');
 var current_channel = (last_channel) ? last_channel : "";
 
 
@@ -24,17 +24,24 @@ socket.on('connect', function(){
 
 
 
-// CHANNEL LIST
+// 1. CHANNEL LIST functionality
+// helper function to leave currently active channel
 function leave_current_channel() {
   if (current_channel !== "") {
+    // un-select all channels
     document.querySelectorAll('#channels li').forEach( (li) => {li.className = "channel"} );
+    // hide the whole messageboard block
     document.querySelector('#messages-container').style.display = "none";
+    // remove last channel name
     document.querySelector('#messages-channel-name').innerHTML = "";
+    // remove all messages from last channel
     document.querySelector('#messages').innerHTML = "";
+    // ubsubscribe from receiving events for last channel
     socket.emit('channels-leave', {
       'username': username,
       'channel': current_channel
     });
+    // set global variable
     current_channel = "";
   }
 }
@@ -46,9 +53,11 @@ function add_channel_to_list(name){
     li.innerHTML = name;
     li.onclick = function() {
         if (current_channel === name) {
+            // leave channel
             leave_current_channel();
             this.className = "channel";
         } else {
+            // enter channel
             leave_current_channel();
             current_channel = name;
             this.className = "channel-selected";
@@ -62,12 +71,14 @@ function add_channel_to_list(name){
     document.querySelector('#channels').prepend(li);
 };
 
+// 1.1. On loading the channels page, receive and display all current channels
 socket.on('channels-display-all', (channels) => { channels.forEach(add_channel_to_list) } );
+// 2.2. When someone creates a new channel, add it to the list of channels
 socket.on('channels-display-new', add_channel_to_list);
 
 
 
-// MESSAGE BOARD
+// 2. MESSAGE BOARD Functionality
 function add_message_to_list(data){
   const li = document.createElement("li");
   li.innerHTML = `<span class='msg-timestamp'>${data.timestamp}</span>
@@ -77,8 +88,13 @@ function add_message_to_list(data){
   document.querySelector('#messages').prepend(li);
 };
 
+// 2.1. On entering a channel, prepare and display the messageboard
 socket.on('channels-on-join', (data) => {
+  // display channel name
   document.querySelector('#messages-channel-name').innerHTML = "Channel: " + data.channel;
+  // display channel messages
+  data.messages.forEach(add_message_to_list);
+  // add handler to send a new message
   document.querySelector("#messages-form").onsubmit = () => {
       socket.emit("messages-new", {
         "channel": data.channel,
@@ -88,7 +104,9 @@ socket.on('channels-on-join', (data) => {
       document.querySelector("#messages-new-input").value = '';
       return false;
   };
-  data.messages.forEach(add_message_to_list);
+  // show the whole messageboard block
   document.querySelector('#messages-container').style.display = "none";
 });
+
+// 2.2. On receiving a new message, add it to the list of messages
 socket.on('messages-display-new', add_message_to_list);
