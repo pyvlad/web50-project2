@@ -1,10 +1,10 @@
-var socket = io.connect('http://' + document.domain + ':' + location.port);
 var username = localStorage.getItem('username');
-var current_channel = localStorage.getItem('latest_channel');
-if (!current_channel){
-  current_channel = "";
-}
 
+var last_channel = localStorage.getItem('latest_channel')
+var current_channel = (last_channel) ? last_channel : "";
+
+
+var socket = io.connect('http://' + document.domain + ':' + location.port);
 
 // on connect, add event handler to form submit button
 socket.on('connect', function(){
@@ -28,6 +28,7 @@ socket.on('connect', function(){
 function leave_current_channel() {
   if (current_channel !== "") {
     document.querySelectorAll('#channels li').forEach( (li) => {li.className = "channel"} );
+    document.querySelector('#messages-container').style.display = "none";
     document.querySelector('#messages-channel-name').innerHTML = "";
     document.querySelector('#messages').innerHTML = "";
     socket.emit('channels-leave', {
@@ -88,5 +89,6 @@ socket.on('channels-on-join', (data) => {
       return false;
   };
   data.messages.forEach(add_message_to_list);
+  document.querySelector('#messages-container').style.display = "none";
 });
 socket.on('messages-display-new', add_message_to_list);
