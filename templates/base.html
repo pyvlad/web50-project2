@@ -4,7 +4,7 @@
     {% block head %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <title>{% block title %}{% endblock %} [project2]</title>
     {% endblock %}
@@ -18,7 +18,6 @@
     <div id="navigation">
       {% block navigation %}
       <ul>
-        <li><a href="{{ url_for('index') }}">Home</a></li>
         <li><a href="{{ url_for('channels') }}">Channels</a></li>
       </ul>
       {% endblock %}

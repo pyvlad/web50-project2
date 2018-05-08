@@ -11,7 +11,15 @@
 
 {% block content %}
 
-  <div id="channels-container">
+  <form id="login-form" action="" style="display:none">
+     Please submit your username:<br>
+     <input type="text" id="login-username" name="username"><br>
+     <button type="submit" id="login-submit">Send</button>
+  </form>
+
+  <h2 id="greeting" style="display:none"></h2>
+
+  <div id="channels-container" style="display:none">
     <h2>All Channels</h2>
     <div id="channels-form-container">
       <form id="channels-form" action="">
