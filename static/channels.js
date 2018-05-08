@@ -105,7 +105,7 @@ socket.on('channels-on-join', (data) => {
       return false;
   };
   // show the whole messageboard block
-  document.querySelector('#messages-container').style.display = "none";
+  document.querySelector('#messages-container').style.display = "block";
 });
 
 // 2.2. On receiving a new message, add it to the list of messages
