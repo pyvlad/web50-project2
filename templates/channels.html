@@ -24,11 +24,13 @@
 
 {% block content %}
 
-  <form id="login-form" action="" style="display:none">
-     Please submit your username:<br>
-     <input type="text" id="login-username" name="username"><br>
-     <button type="submit" id="login-submit">Send</button>
-  </form>
+  <div id="login-form-container">
+    <form id="login-form" action="" style="display:none">
+       <h3>Your Username</h3>
+       <input type="text" id="login-username" name="username"><br>
+       <button type="submit" id="login-submit">Submit</button>
+    </form>
+  </div>
 
   <h2 id="greeting" style="display:none"></h2>
 

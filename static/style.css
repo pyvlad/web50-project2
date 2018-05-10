@@ -57,6 +57,16 @@
 }
 
 
+/* Login */
+#login-form {
+    margin: 28px auto;
+    padding: 14px;
+    background-color: lightgrey;
+    text-align: center;
+    width: 300px;}
+#login-username {margin: 14px; text-align: center;}
+
+
 /* Channels */
 #channels-container {
     margin: 10px 1%;
