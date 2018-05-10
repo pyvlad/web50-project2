@@ -18,6 +18,8 @@ to join an available channel the user needs to click on the channel name;
     - click on another channel (and thus join it),
     - click second time on current channel (and not be in any channel),
     - close the browser (last active channel will be loaded next time).
+5. the user can leave messages when connected to a channel and delete his own messages
+(that's the personal touch)
 
 ### Project files include
 
