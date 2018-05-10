@@ -6,7 +6,8 @@ My implementation of **Study Project 2: Flack**:
 a basic attempt at building an online messaging service using Flask and socket.io.
 
 <br>
-### Short description:
+### Short description
+
 Everything happens on a single page at '/':
 
 1. a user is asked to enter username which is stored on client in localStorage for future use;
@@ -20,7 +21,8 @@ to join an available channel the user needs to click on the channel name;
     - close the browser (last active channel will be loaded next time).
 
 <br>
-### Project files include:
+### Project files include
+
 The server-side of the application is implemented in app.py.
 
 The client-side is implemented in static/channels.js and static/style.css.
