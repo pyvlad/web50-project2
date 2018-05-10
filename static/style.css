@@ -69,10 +69,8 @@
 
 /* Channels */
 #channels-container {
-    margin: 10px 1%;
-    padding: 10px;
-    width: 45%;
-    float: left;
+  margin: 10px 1%;
+  padding: 10px;
 }
 
 h2 {
@@ -119,8 +117,6 @@ h2 {
  #messages-container {
      margin: 10px 1%;
      padding: 10px;
-     width: 45%;
-     float: right;
  }
 
  #messages {
@@ -155,4 +151,19 @@ h2 {
 
  .msg-remove {
   float: right;
+}
+
+
+
+
+@media (min-width: 992px) {
+  #channels-container {
+    float:left;
+    width: 45%;
+   }
+
+  #messages-container {
+    float:right;
+    width: 45%;
+  }
 }
