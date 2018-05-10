@@ -6,7 +6,20 @@
   {{ super() }}
   <script type="text/javascript" src="{{ url_for('static', filename='socket.io-1.3.6.min.js') }}"></script>
   <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script> -->
+  <script type="text/javascript" src="{{ url_for('static', filename='handlebars-4.0.11.min.js') }}"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script> -->
   <script src="{{url_for('static', filename='channels.js')}}"></script>
+
+  <script id="message-template" type="text/x-handlebars-template">
+    <li>
+      {% raw -%}
+      <span class='msg-timestamp'>{{ data.timestamp }}</span>
+      <span class='msg-author'>{{ data.author }}</span>
+      </br>
+      <span class="msg-body">{{ data.message }}</span>
+      {%- endraw %}
+    </li>
+  </script>
 {% endblock %}
 
 {% block content %}

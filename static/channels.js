@@ -1,24 +1,28 @@
-// set global variables
+// declare global variables
 var username = localStorage.getItem('username');
 var last_channel = localStorage.getItem('latest_channel');
 var current_channel = (last_channel) ? last_channel : "";
 var socket;
+var message_template;
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (!username) {
-      get_username();
-    } else {
-      // greet user
-      var greeting = document.querySelector('#greeting');
-      greeting.innerHTML = `Hello, ${username}!`;
-      greeting.style.display = "block";
 
-      socket = make_socket();
+  message_template = Handlebars.compile(document.querySelector('#message-template').innerHTML);
 
-      // show the channels block
-      document.querySelector('#channels-container').style.display = "block";
-    };
+  if (!username) {
+    get_username();
+  } else {
+    // greet user
+    var greeting = document.querySelector('#greeting');
+    greeting.innerHTML = `Hello, ${username}!`;
+    greeting.style.display = "block";
+
+    socket = make_socket();
+
+    // show the channels block
+    document.querySelector('#channels-container').style.display = "block";
+  };
 });
 
 
@@ -130,12 +134,9 @@ function make_socket() {
 
   // 2. MESSAGE BOARD Functionality
   function add_message_to_list(data){
-    const li = document.createElement("li");
-    li.innerHTML = `<span class='msg-timestamp'>${data.timestamp}</span>
-                    <span class='msg-author'>${data.author}</span>
-                    </br>
-                    <span class="msg-body">${data.message}</span>`;
-    document.querySelector('#messages').prepend(li);
+    const li = message_template({"data": data})
+    const messages = document.querySelector('#messages')
+    messages.innerHTML = li + messages.innerHTML;
   };
 
   // 2.1. On entering a channel, prepare and display the messageboard
