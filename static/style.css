@@ -126,12 +126,48 @@ h2 {
      overflow: hidden;
  }
 
+
+ @keyframes hide {
+     0% {
+         opacity: 1;
+         height: 100%;
+         line-height: 100%;
+
+         margin: 5px;
+         padding: 5px;
+         border-bottom: 1px solid grey;
+     }
+     99% {
+         opacity: 0;
+         height: 100%;
+         line-height: 100%;
+
+         margin: 5px;
+         padding: 5px;
+         border-bottom: 1px solid grey;
+     }
+     100% {
+         opacity: 0;
+         height: 0px;
+         line-height: 0px;
+
+         margin: 0px;
+         padding: 0px;
+         border-bottom: 0px;
+     }
+ }
+
  #messages li {
    display: block;
    margin: 5px;
    padding: 5px;
    border-bottom: 1px solid grey;
    color: black;
+
+    animation-name: hide;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
  }
 
  .msg-author {

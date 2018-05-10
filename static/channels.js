@@ -164,7 +164,12 @@ function make_socket() {
 
   socket.on('messages-remove-one', function(message_id) {
     document.querySelectorAll(".one-message").forEach((li) => {
-      if (li.dataset.msg == message_id) { li.innerHTML = "DELETED"; };
+      if (li.dataset.msg == message_id) {
+        li.style.animationPlayState = 'running';
+        li.addEventListener('animationend', () =>  {
+            li.remove();
+        });
+      };
     });
   });
 
