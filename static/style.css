@@ -152,3 +152,7 @@ h2 {
  .msg-body {
    font-family: arial;
  }
+
+ .msg-remove {
+  float: right;
+}

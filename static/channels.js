@@ -134,8 +134,8 @@ function make_socket() {
 
   // 2. MESSAGE BOARD Functionality
   function add_message_to_list(data){
-    const li = message_template({"data": data})
-    const messages = document.querySelector('#messages')
+    const li = message_template({"data": data, "own": (data.author === username) ? true : false });
+    const messages = document.querySelector('#messages');
     messages.innerHTML = li + messages.innerHTML;
   };
 
@@ -162,6 +162,23 @@ function make_socket() {
   // 2.2. On receiving a new message, add it to the list of messages
   socket.on('messages-display-new', add_message_to_list);
 
+  socket.on('messages-remove-one', function(message_id) {
+    document.querySelectorAll(".one-message").forEach((li) => {
+      if (li.dataset.msg == message_id) { li.innerHTML = "DELETED"; };
+    });
+  });
+
   return socket;
 
 }
+
+
+
+
+function remove_message(caller) {
+  socket.emit('messages-delete', {
+    'username': username,
+    'channel': current_channel,
+    'id': parseInt(caller.parentElement.dataset.msg)
+  });
+};

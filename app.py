@@ -52,11 +52,30 @@ def new_message(data):
     message = {
         "author": data["username"],
         "message": data["message"],
-        "timestamp": datetime.utcnow().ctime()}
+        "timestamp": datetime.utcnow().ctime(),
+        "channel": channel}
     while len(CHANNELS[channel]) >= MAX_MESSAGES:
         (CHANNELS[channel]).pop(0)
+    if len(CHANNELS[channel]):
+        message["id"] = CHANNELS[channel][-1]["id"] + 1
+    else:
+        message["id"] = 0
     CHANNELS[channel] += [message]
     emit('messages-display-new', message, room=channel)
+
+
+@socketio.on('messages-delete')
+def delete_message(data):
+    global CHANNELS
+    channel = data["channel"]
+    message_id = data["id"]
+    all_messages = CHANNELS[channel]
+    for num, msg in enumerate(all_messages):
+        if msg["id"] == message_id:
+            all_messages.pop(num)
+            break
+    emit('messages-remove-one', message_id, room=channel)
+
 
 @socketio.on('channels-leave')
 def on_leave(data):

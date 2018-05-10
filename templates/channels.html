@@ -11,14 +11,17 @@
   <script src="{{url_for('static', filename='channels.js')}}"></script>
 
   <script id="message-template" type="text/x-handlebars-template">
-    <li>
-      {% raw -%}
+    {% raw -%}
+    <li class="one-message" data-msg="{{ data.id }}">
       <span class='msg-timestamp'>{{ data.timestamp }}</span>
       <span class='msg-author'>{{ data.author }}</span>
-      </br>
-      <span class="msg-body">{{ data.message }}</span>
-      {%- endraw %}
+      <span>{{ data.id }}</span>
+      {{#if own}}
+        <button class='msg-remove' onclick="remove_message(this);">Remove</button>
+      {{/if}}
+      <br><span class="msg-body">{{ data.message }}</span>
     </li>
+    {%- endraw %}
   </script>
 {% endblock %}
 
